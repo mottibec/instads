@@ -11,6 +11,7 @@ import authenticationController from "./routes/authentication";
 import { IAuthProvider, FacebookAuthProvider, GoogleAuthProvider, LocalAuthProvider } from "./services/authProvider";
 import JWTService from "./services/jwtService";
 import AuthService from "./services/authService";
+import dbManager from "./database/dbManager";
 
 
 const container = new Container();
@@ -30,9 +31,10 @@ container.bind<UserService>(TYPES.UserService)
     .to(UserService);
 container.bind<AuthService>(TYPES.AuthService)
     .to(AuthService);
-
 container.bind<JWTService>(TYPES.JWTService)
     .to(JWTService);
+container.bind<dbManager>(TYPES.DbManager)
+    .to(dbManager);
 
 //auth providers
 container.bind<IAuthProvider>(TYPES.IAuthProvider)

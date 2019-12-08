@@ -11,7 +11,8 @@ const TYPES = {
     UserService: Symbol.for("UserService"),
     TransactionService: Symbol.for("TransactionService"),
     JWTService: Symbol.for("JWTService"),
-    AuthService: Symbol.for("AuthService")
+    AuthService: Symbol.for("AuthService"),
+    DbManager: Symbol.for("dbManager"),
 };
 
 export { TYPES };

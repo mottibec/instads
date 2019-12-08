@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import config from "../config/config";
+import { injectable } from "inversify";
 
-
+@injectable()
 export default class dbManager {
     private _mongooseConnection!: mongoose.Connection;
 

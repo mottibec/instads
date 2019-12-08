@@ -24,7 +24,7 @@ export default class ExpressWebServer implements IWebServer {
         this._app.use(bodyparser.json());
         this._app.use(passport.initialize());
     }
-    public start(port: number, callback: Function) {
+    public start(port: number, callback: () => void) {
         this._app.use('/', this._router);
         this._app.use(this.handleError);
         this._app.listen(port, callback);

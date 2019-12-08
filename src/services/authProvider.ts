@@ -11,6 +11,7 @@ import { TYPES } from "../inversify.types";
 import { UserService } from "./userService";
 import { User } from "../models/user";
 import AuthService from "./authService";
+import { Strategy } from "passport-strategy";
 
 export interface IAuthProvider {
     register(webServer: IWebServer, route: string): void;
@@ -135,8 +136,7 @@ export class FacebookAuthProvider implements IAuthProvider {
             clientID: config.oAuth.facebook.appId,
             clientSecret: config.oAuth.facebook.secret,
             profileFields: ['id', 'email', 'gender', 'locale', 'name', 'displayName'],
-        },
-            (...args) => this.verifyUser(...args)));
+        }, (accessToken:string, refreshToken:string, profile: any, done: Function) => this.verifyUser(accessToken, refreshToken, profile, done )));
         webServer.registerPost(`${route}/facebook`, (request: IRequest, response: IResponse) =>
             passport.authenticate('facebook-token', { scope: ['email'] }, (error, user, info) => {
                 const token = this._jwtService.sign(user);

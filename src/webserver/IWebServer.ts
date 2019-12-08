@@ -7,5 +7,5 @@ export interface IWebServer {
 
     registerProtectedPost(routeTemplate: string, callback: Function): void;
 
-    start(port: number, callback: Function): void;
+    start(port: number, callback: () => void): void;
 }

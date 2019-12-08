@@ -4,12 +4,12 @@ export default {
     jwtSecret: "moneywhereappsupersecret",
     oAuth: {
         facebook: {
-            appId: process.env["facebookAppId"],
-            secret: process.env["facebookAppSecret"],
+            appId: process.env["facebookAppId"] || "empty",
+            secret: process.env["facebookAppSecret"] || "empty",
         },
         google: {
-            appId:process.env["googleAppId"],
-            secret: process.env["googleAppId"]
+            appId:process.env["googleAppId"] || "empty",
+            secret: process.env["googleAppId"] || "empty"
         }
     }
 

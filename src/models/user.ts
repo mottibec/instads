@@ -1,19 +1,16 @@
-import { Location } from "./location";
 import crypto from "crypto";
 
-interface IUser {
+interface iUser {
     id: string;
     name: string;
     avatar: string;
     phone?: string;
     email?: string;
     password?: string;
-    rating: number;
-    location: Location;
     gender: gender;
     dob: Date,
+    account: UserAccount;
     countryCode: string,
-    mainCurrencyCode: string,
     authProvider?: authProvider
     authToken: string,
     authRefreshToken: string;
@@ -30,7 +27,8 @@ enum gender {
     other
 }
 
-class User implements IUser {
+class User implements iUser {
+    account!: UserAccount;
     authProvider!: authProvider;
     authToken!: string;
     authRefreshToken!: string;
@@ -44,7 +42,6 @@ class User implements IUser {
     phone!: string;
     email: string;
     rating!: number;
-    location!: Location;
     gender!: gender;
 
     [k: string]: any;
@@ -54,9 +51,6 @@ class User implements IUser {
         this.email = email;
         this.id = id || crypto.randomBytes(16).toString("hex");
     }
-    set Location(location: Location) {
-        this.location = location;
-    }
 }
 
-export { IUser, User };
+export { iUser, User };

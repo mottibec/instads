@@ -4,7 +4,7 @@ import { IWebServer } from "../webserver/IWebServer";
 import { inject, multiInject, injectable } from "inversify";
 import { IAuthProvider } from "../services/authProvider";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
-import { User } from "../models/user";
+import { User, iUser } from "../models/user";
 import { UserService } from "../services/userService";
 import JWTService from "../services/jwtService";
 import AuthService from "../services/authService";
@@ -53,11 +53,9 @@ export default class authenticationController implements IController {
         }
         response.status(400);
     }
-    async createUser(signUpData: any): Promise<User> {
-        let user = new User(signUpData.name, signUpData.email);
-        user.phone = signUpData.phone;
+    async createUser(signUpData: any): Promise<iUser> {
+        let user = <iUser>(signUpData.name, signUpData.email);
         user.gender = signUpData.gender;
-        user.mainCurrencyCode = signUpData.currencyCode;
         user.countryCode = signUpData.countryCode;
         user.password = await this._authService.hash(signUpData.password);
         return user;

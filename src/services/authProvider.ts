@@ -9,7 +9,7 @@ import { IRequest, IResponse } from "../webserver/IWebRequest";
 import JWTService from "./jwtService";
 import { TYPES } from "../inversify.types";
 import { UserService } from "./userService";
-import { User } from "../models/user";
+import { User, iUser } from "../models/user";
 import AuthService from "./authService";
 import { Strategy } from "passport-strategy";
 
@@ -99,8 +99,10 @@ export class GoogleAuthProvider implements IAuthProvider {
                 console.log("paylod.email", paylod.email);
                 let user = await this._userService.findByEmail(paylod.email);
                 if (!user) {
+                    user = <iUser>{};
                     const name = paylod.given_name || paylod.family_name || paylod.email;
-                    user = new User(name, paylod.email);
+                    user.name = name;
+                    user.email = paylod.email;
                     user.authToken = idToken;
                     user.avatar = paylod.picture || "";
                     //newUser.authRefreshToken = refreshToken;
@@ -136,7 +138,7 @@ export class FacebookAuthProvider implements IAuthProvider {
             clientID: config.oAuth.facebook.appId,
             clientSecret: config.oAuth.facebook.secret,
             profileFields: ['id', 'email', 'gender', 'locale', 'name', 'displayName'],
-        }, (accessToken:string, refreshToken:string, profile: any, done: Function) => this.verifyUser(accessToken, refreshToken, profile, done )));
+        }, (accessToken: string, refreshToken: string, profile: any, done: Function) => this.verifyUser(accessToken, refreshToken, profile, done)));
         webServer.registerPost(`${route}/facebook`, (request: IRequest, response: IResponse) =>
             passport.authenticate('facebook-token', { scope: ['email'] }, (error, user, info) => {
                 const token = this._jwtService.sign(user);
@@ -151,7 +153,8 @@ export class FacebookAuthProvider implements IAuthProvider {
         }
         const emails = profile.emails as { value: string }[];
 
-        const newUser = new User(profile.displayName, emails[0].value, profile.id);
+
+        const newUser = <iUser>(profile.displayName, emails[0].value, profile.id);
 
         newUser.authToken = accessToken;
         newUser.authRefreshToken = refreshToken;

@@ -1,24 +1,21 @@
-interface iUserAccount {
+import mongoose from "mongoose";
+
+export interface iUserAccount extends mongoose.Document {
     id: string;
-    email:string;
-    whatsapp:string;
+    email: string;
+    whatsapp: string;
     instagram: string;
     followersCount: number;
-    conversionRate:number;
-    priceForPost:number;
-    location:string;
+    conversionRate: number;
+    priceForPost: number;
+    location: string;
     categories: Category[];
 }
 
-class UserAccount implements iUserAccount 
-{
-    categories!: Category[];
-    id!: string;    
-    email!: string;
-    whatsapp!: string;
-    instagram!: string;
-    followersCount!: number;
-    conversionRate!: number;
-    priceForPost!: number;
-    location!: string;
+export class UserAccount {
+    _userAccount: iUserAccount;
+    constructor(userAccount: iUserAccount) {
+        this._userAccount = userAccount;
+
+    }
 }

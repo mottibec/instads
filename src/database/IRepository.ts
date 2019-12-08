@@ -4,7 +4,9 @@ export interface IRepository<T> {
 
     update(item: T): Promise<boolean>;
 
-    find(item: T): Promise<T[]>;
+    find(query: any): Promise<T[]>;
 
-    findOne(id: string): Promise<T | null>;
+    findOne(query: any): Promise<T | null>;
+
+    findById(id: string): Promise<T | null>;
 }

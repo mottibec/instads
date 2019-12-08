@@ -1,20 +1,22 @@
 import crypto from "crypto";
+import mongoose from "mongoose";
+import { iUserAccount } from "./userAccount";
 
-interface iUser {
+interface iUser extends mongoose.Document {
     id: string;
     name: string;
     avatar: string;
-    phone?: string;
     email?: string;
-    password?: string;
+    password: string;
     gender: gender;
     dob: Date,
-    account: UserAccount;
+    account: iUserAccount;
     countryCode: string,
     authProvider?: authProvider
     authToken: string,
     authRefreshToken: string;
 }
+
 enum authProvider {
     facebook,
     google,
@@ -27,29 +29,17 @@ enum gender {
     other
 }
 
-class User implements iUser {
-    account!: UserAccount;
-    authProvider!: authProvider;
-    authToken!: string;
-    authRefreshToken!: string;
-    password!: string;
-    dob!: Date;
-    countryCode!: string;
-    mainCurrencyCode!: string;
-    id: string;
-    name: string;
-    avatar!: string;
-    phone!: string;
-    email: string;
-    rating!: number;
-    gender!: gender;
-
+class User {
+    _user: iUser;
     [k: string]: any;
-
-    constructor(name: string, email: string, id?: string) {
-        this.name = name;
-        this.email = email;
-        this.id = id || crypto.randomBytes(16).toString("hex");
+    constructor(user: iUser) {
+        this._user = user;
+    }
+    get id() {
+        return this._user.id;
+     }
+    set authToken(value: string) {
+        this._user.authToken = value;
     }
 }
 

@@ -1,7 +1,7 @@
 export default {
     PORT: process.env["PORT"] || "3000",
     rootServiceUrl: "http://localhost:3000",
-    jwtSecret: "moneywhereappsupersecret",
+    jwtSecret: "instadsappsupersecret",
     oAuth: {
         facebook: {
             appId: process.env["facebookAppId"] || "empty",

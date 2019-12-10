@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import mongoose from "mongoose";
-import { iUserAccount } from "./userAccount";
 
 interface iUser extends mongoose.Document {
     id: string;
@@ -10,20 +9,26 @@ interface iUser extends mongoose.Document {
     password: string;
     gender: gender;
     dob: Date,
-    account: iUserAccount;
+    whatsapp: string;
+    instagram: string;
+    followersCount: number;
+    conversionRate: number;
+    priceForPost: number;
+    location: string;
+    categories: Category[];
     countryCode: string,
     authProvider?: authProvider
     authToken: string,
     authRefreshToken: string;
 }
 
-enum authProvider {
+export enum authProvider {
     facebook,
     google,
     local
 }
 
-enum gender {
+export enum gender {
     male,
     female,
     other

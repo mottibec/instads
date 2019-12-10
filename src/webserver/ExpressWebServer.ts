@@ -6,6 +6,7 @@ import passport from "passport";
 import bodyparser from "body-parser";
 import JWTService from "../services/jwtService";
 import { TYPES } from "../inversify.types";
+import path from "path";
 
 
 @injectable()
@@ -23,6 +24,9 @@ export default class ExpressWebServer implements IWebServer {
         this._app.use(bodyparser.urlencoded({ extended: false }))
         this._app.use(bodyparser.json());
         this._app.use(passport.initialize());
+        this._app.set("views", path.join(path.dirname(__dirname), "views"));
+        this._app.set("view engine", "ejs");
+        this._app.use(express.static(path.join(path.dirname(__dirname), 'public')));
     }
     public start(port: number, callback: () => void) {
         this._app.use('/', this._router);

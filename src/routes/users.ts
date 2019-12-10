@@ -34,7 +34,7 @@ export default class UserController implements IController {
     }
     async getUsers(request: IRequest, response: IResponse) {
         let result = await this._userService.getAllUsers();
-        response.send(result);
+        response.render("users", {users: result});
     }
     async createUser(request: IRequest, response: IResponse) {
         let user = request.body.user;

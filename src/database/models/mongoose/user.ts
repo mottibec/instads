@@ -19,13 +19,35 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    account: {
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "UserAccount"
-        }
+    instagram: {
+        type: String,
+        required: true
+    },
 
+    followersCount: {
+        type: Number,
+        required: true
+    },
+
+    conversionRate: {
+        type: Number,
+        required: true
+    },
+
+    priceForPost: {
+        type: Number,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+
+    categories: {
+        type: String,
+        required: true
     }
+
 }
 );
 

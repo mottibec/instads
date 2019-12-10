@@ -57,7 +57,6 @@
                 <h3>Featured</h3>
                 <div class="featured__container">
                     <% users.forEach(user => {%>
-                    <% console.log("-----" + user.avatar + "------") %>
                     <div class="profile profile--featured">
                         <div class="img-box">
                             <img src="<%=user.avatar%>" alt="" class="profile__img" />
@@ -73,19 +72,19 @@
                                 <p>Followers</p>
                             </div>
                             <div class="profile__conversion">
-                                <h4><%= user.conversionRate%></h4>
+                                <h4><%= user.conversionRate%>%</h4>
                                 <p>Conversion</p>
                             </div>
                         </div>
                         <div class="profile__contact">
-                            <p>Starting At <span><%= user.priceForPost%></span></p>
+                            <p>Starting At <span>$<%= user.priceForPost%></span></p>
                             <a href="https://instagram.com/<%=user.instagram%>" class="instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
                             <a href="https://wa.me/<%=user.whatsapp%>" class="whatsapp">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
-                            <a href="" class="email">
+                            <a href="mailto:<%=user.email%>" class="email">
                                 <i class="far fa-envelope"></i>
                             </a>
                         </div>
@@ -134,156 +133,48 @@
             <section class="profiles">
                 <p class="profiles__sub-title">All Profiles</p>
                 <h2>Find Your Next Advertiser</h2>
+                <% users.forEach(user => {%>
                 <div class="profiles__list">
                     <div class="profiles__item">
                         <div class="img-box">
-                            <img src="https://i.pravatar.cc/1000" alt="" />
+                            <img src="<%=user.avatar%>" alt="" />
                         </div>
                         <div class="profiles__content-box">
                             <p>
-                                Simona Levy,
+                                <%= user.name %>,
                                 <span>
                                     <i class="fas fa-map-marker-alt"></i>
-                                    London, UK
+                                    <%= user.location%>
                                 </span>
                             </p>
                             <div class="profiles__details">
                                 <div class="profiles__followers">
-                                    <h4>123K</h4>
+                                    <h4><%= user.followersCount %></h4>
                                     <p>Followers</p>
                                 </div>
                                 <div class="profiles__conversion">
-                                    <h4>23%</h4>
+                                    <h4><%= user.conversionRate %>%</h4>
                                     <p>Conversion</p>
                                 </div>
                             </div>
 
                             <div class="profiles__contact">
-                                <a href="" class="whatsapp">
+                                <a href="https://wa.me/<%=user.whatsapp%>" class="whatsapp">
                                     <i class="fab fa-whatsapp"></i>
                                 </a>
-                                <a href="" class="email">
+                                <a href="mailto:<%=user.email%>" class="email">
                                     <i class="far fa-envelope"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="profiles__extra">
-                            <a href="">Instagram</a>
+                            <a href="https://instagram.com/<%=user.instagram%>">Instagram</a>
                             <p>52 Orders</p>
                         </div>
                     </div>
-                    <div class="profiles__item">
-                        <div class="img-box">
-                            <img src="https://i.pravatar.cc/1400" alt="" />
-                        </div>
-                        <div class="profiles__content-box">
-                            <p>
-                                Mary Jain,
-                                <span>
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    California, USA
-                                </span>
-                            </p>
-                            <div class="profiles__details">
-                                <div class="profiles__followers">
-                                    <h4>123K</h4>
-                                    <p>Followers</p>
-                                </div>
-                                <div class="profiles__conversion">
-                                    <h4>23%</h4>
-                                    <p>Conversion</p>
-                                </div>
-                            </div>
-
-                            <div class="profiles__contact">
-                                <a href="" class="whatsapp">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                                <a href="" class="email">
-                                    <i class="far fa-envelope"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="profiles__extra">
-                            <a href="">Instagram</a>
-                            <p>90 Orders</p>
-                        </div>
-                    </div>
-                    <div class="profiles__item">
-                        <div class="img-box">
-                            <img src="https://i.pravatar.cc/1100" alt="" />
-                        </div>
-                        <div class="profiles__content-box">
-                            <p>
-                                Eliana Mary,
-                                <span>
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    Sydney, Australia
-                                </span>
-                            </p>
-                            <div class="profiles__details">
-                                <div class="profiles__followers">
-                                    <h4>123K</h4>
-                                    <p>Followers</p>
-                                </div>
-                                <div class="profiles__conversion">
-                                    <h4>23%</h4>
-                                    <p>Conversion</p>
-                                </div>
-                            </div>
-
-                            <div class="profiles__contact">
-                                <a href="" class="whatsapp">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                                <a href="" class="email">
-                                    <i class="far fa-envelope"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="profiles__extra">
-                            <a href="">Instagram</a>
-                            <p>3 Orders</p>
-                        </div>
-                    </div>
-                    <div class="profiles__item">
-                        <div class="img-box">
-                            <img src="https://i.pravatar.cc/1200" alt="" />
-                        </div>
-                        <div class="profiles__content-box">
-                            <p>
-                                Rachel Green,
-                                <span>
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    Jerusalem, Israel
-                                </span>
-                            </p>
-                            <div class="profiles__details">
-                                <div class="profiles__followers">
-                                    <h4>123K</h4>
-                                    <p>Followers</p>
-                                </div>
-                                <div class="profiles__conversion">
-                                    <h4>23%</h4>
-                                    <p>Conversion</p>
-                                </div>
-                            </div>
-
-                            <div class="profiles__contact">
-                                <a href="" class="whatsapp">
-                                    <i class="fab fa-whatsapp"></i>
-                                </a>
-                                <a href="" class="email">
-                                    <i class="far fa-envelope"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="profiles__extra">
-                            <a href="">Instagram</a>
-                            <p>48 Orders</p>
-                        </div>
-                    </div>
                 </div>
+                <% }); %>
+
             </section>
         </main>
         <footer class="footer"></footer>

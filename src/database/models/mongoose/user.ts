@@ -23,17 +23,22 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-
+    avatar: {
+        type: String,
+        required: true
+    },
+    whatsapp: {
+        type: String,
+        required: true
+    },
     followersCount: {
         type: Number,
         required: true
     },
-
     conversionRate: {
         type: Number,
         required: true
     },
-
     priceForPost: {
         type: Number,
         required: true
@@ -42,7 +47,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-
     categories: {
         type: String,
         required: true

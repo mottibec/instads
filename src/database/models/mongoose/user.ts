@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import { User } from "../../../models/user"
-
 
 const UserSchema = new mongoose.Schema({
     email: {
@@ -48,14 +46,10 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     categories: {
-        type: String,
-        required: true
+        type: [String]
     }
-
 }
 );
 
 UserSchema.index({ email: 1 });
-UserSchema.loadClass(User);
-
 export default mongoose.model('User', UserSchema);

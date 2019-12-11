@@ -12,7 +12,8 @@ export class MongoRepository<T extends mongoose.Document> implements IRepository
     }
 
     async create(item: T): Promise<boolean> {
-        var result = await this._model.create(item);
+        console.log(item);
+        var result = await this._model.create(item).catch(error => console.log(error));
         return result != null;
     }
     update(item: T): Promise<boolean> {

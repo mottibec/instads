@@ -17,7 +17,8 @@ export default class dbManager {
         this._mongooseConnection = mongoose.connection;
     }
     async close() {
-        await mongoose.connection.close().catch(err => console.log('Error while closing the database', err))
+        await mongoose.connection.close()
+        .catch(err => console.log('Error while closing the database', err))
     }
     public get mongooseConnection(): mongoose.Connection {
         return this._mongooseConnection;

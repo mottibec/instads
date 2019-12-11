@@ -2,7 +2,6 @@ import crypto from "crypto";
 import mongoose from "mongoose";
 
 interface iUser extends mongoose.Document {
-    id: string;
     name: string;
     avatar: string;
     email?: string;
@@ -38,11 +37,15 @@ class User {
     _user: iUser;
     [k: string]: any;
     constructor(user: iUser) {
+        console.log("User constructor");
+        console.log(user);
         this._user = user;
     }
     get id() {
+        console.log("get id()");
+        console.log(this._user);
         return this._user.id;
-     }
+    }
     set authToken(value: string) {
         this._user.authToken = value;
     }

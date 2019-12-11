@@ -1,5 +1,5 @@
 import UserSchema from "../database/models/mongoose/user"
-import { iUser, gender, authProvider } from "../models/user";
+import { iUser } from "../models/user";
 import { injectable } from "inversify";
 import { MongoRepository } from "./mongoRepository";
 

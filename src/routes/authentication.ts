@@ -36,7 +36,9 @@ export default class authenticationController implements IController {
     }
     async signUp(request: IRequest, response: IResponse) {
         const signUpData = request.body;
+        console.log(request);
         const savedUser = await this._userService.findByEmail(signUpData.email);
+        console.log(savedUser);
         if (savedUser) {
             return response
                 .status(400)

@@ -9,6 +9,7 @@ import { UserService } from "../services/userService";
 import JWTService from "../services/jwtService";
 import AuthService from "../services/authService";
 import { strict } from "assert";
+import axios from "axios";
 
 @injectable()
 export default class authenticationController implements IController {
@@ -57,22 +58,26 @@ export default class authenticationController implements IController {
         response.status(400);
     }
     async createUser(signUpData: any): Promise<iUser> {
+        var response = await axios.get(`https://www.instagram.com/${signUpData.instagram}/?__a=1`);
+        var instagramData = response.data;
         var user = <iUser>{
             name: signUpData.name,
             email: signUpData.email,
             gender: signUpData.gender,
             countryCode: signUpData.countryCode,
             password: signUpData.password,
-            avatar: signUpData.avatar,
+            avatar: instagramData.profile_pic_url_hd,
             instagram: signUpData.instagram,
             whatsapp: signUpData.whatsapp,
             dob: signUpData.dob,
-            followersCount: signUpData.followersCount,
+            followersCount: instagramData.edge_followed_by.count,
             conversionRate: signUpData.conversionRate,
             priceForPost: signUpData.priceForPost,
             location: signUpData.location
         };
+
         user.password = await this._authService.hash(signUpData.password);
+
         return user;
     }
     testProdected(request: IRequest, response: IResponse) {

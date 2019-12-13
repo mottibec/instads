@@ -38,9 +38,7 @@ export default class authenticationController implements IController {
     }
     async signUp(request: IRequest, response: IResponse) {
         const signUpData = request.body;
-        console.log(signUpData);
         const savedUser = await this._userService.findByEmail(signUpData.email);
-        console.log(savedUser);
         if (savedUser) {
             return response
                 .status(400)
@@ -59,7 +57,7 @@ export default class authenticationController implements IController {
     }
     async createUser(signUpData: any): Promise<iUser> {
         var response = await axios.get(`https://www.instagram.com/${signUpData.instagram}/?__a=1`);
-        var instagramData = response.data;
+        var instagramData = response.data.graphql.user;
         var user = <iUser>{
             name: signUpData.name,
             email: signUpData.email,

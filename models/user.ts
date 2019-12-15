@@ -10,6 +10,7 @@ interface iUser extends mongoose.Document {
     dob: Date,
     whatsapp: string;
     instagram: string;
+    topPost: string,
     followersCount: number;
     conversionRate: number;
     priceForPost: number;

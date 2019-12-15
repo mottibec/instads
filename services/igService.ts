@@ -3,9 +3,32 @@ import { injectable } from "inversify";
 
 @injectable()
 export default class igService {
-   async getUserInfo(userProfile: string) {
+    async getUserInfo(userProfile: string) {
         var response = await axios.get(`https://www.instagram.com/${userProfile}/?__a=1`);
-        console.log(response.data.graphql.user);
-        return response.data.graphql.user;
+        var userinfo = response.data.graphql.user;
+        var mostLikedPost = this.getMostLikedPost(userinfo);
+        return {
+            name: userinfo.full_name,
+            profile: userinfo.profile_pic_url_hd,
+            followersCount: userinfo.edge_followed_by.count,
+            topPost: mostLikedPost
+        };
+    }
+    getMostLikedPost(userInfo: any): string {
+        var postUrl = "";
+        var maxLikes = 0;
+        console.log(typeof userInfo.edge_owner_to_timeline_media.edges);
+        console.log(userInfo.edge_owner_to_timeline_media.edges);
+        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        userInfo.edge_owner_to_timeline_media.edges.forEach((post: any) => {
+            var likeCount = post.node.edge_liked_by.count;
+            console.log(`post likes = ${likeCount} url = ${post.node.display_url}`);
+            if (maxLikes < likeCount) {
+                maxLikes = likeCount;
+                postUrl = post.node.display_url;
+            }
+        });
+        console.log(postUrl);
+        return postUrl;
     }
 }

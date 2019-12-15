@@ -6,6 +6,13 @@ export default class igService {
     async getUserInfo(userProfile: string) {
         var response = await axios.get(`https://www.instagram.com/${userProfile}/?__a=1`);
         var userinfo = response.data.graphql.user;
+        if (userinfo.is_private) {
+            return {
+                name: userinfo.full_name,
+                profile: userinfo.profile_pic_url_hd,
+                followersCount: userinfo.edge_followed_by.count
+            };
+        }
         var mostLikedPost = this.getMostLikedPost(userinfo);
         return {
             name: userinfo.full_name,

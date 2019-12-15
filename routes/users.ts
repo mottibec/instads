@@ -17,6 +17,9 @@ export default class UserController implements IController {
 
     initRoutes() {
         this._webServer.registerGet(this.route, (request: IRequest, response: IResponse) =>
+            this.getUsersView(request, response));
+
+            this._webServer.registerGet(`${this.route}s`, (request: IRequest, response: IResponse) =>
             this.getUsers(request, response));
 
         this._webServer.registerProtectedGet(`${this.route}/:id`, (request: IRequest, response: IResponse) =>
@@ -32,9 +35,13 @@ export default class UserController implements IController {
             this.pingUser(request, response));
 
     }
-    async getUsers(request: IRequest, response: IResponse) {
+    async getUsersView(request: IRequest, response: IResponse) {
         let result = await this._userService.getAllUsers();
         response.render("users", {users: result});
+    }
+    async getUsers(request: IRequest, response: IResponse) {
+        let result = await this._userService.getAllUsers();
+        response.send(result);
     }
     async createUser(request: IRequest, response: IResponse) {
         let user = request.body.user;

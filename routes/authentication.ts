@@ -63,16 +63,17 @@ export default class authenticationController implements IController {
     async createUser(signUpData: any): Promise<iUser> {
         var instagramData = await this._igService.getUserInfo(signUpData.instagram);
         var user = <iUser>{
-            name: instagramData.full_name,
+            name: instagramData.name,
             email: signUpData.email,
             gender: signUpData.gender,
             countryCode: signUpData.countryCode,
             password: signUpData.password,
-            avatar: instagramData.profile_pic_url_hd,
+            avatar: instagramData.profile,
             instagram: signUpData.instagram,
+            topPost:instagramData.topPost,
             whatsapp: signUpData.whatsapp,
             dob: signUpData.dob,
-            followersCount: instagramData.edge_followed_by.count,
+            followersCount: instagramData.followersCount,
             conversionRate: signUpData.conversionRate,
             priceForPost: signUpData.priceForPost,
             location: signUpData.location

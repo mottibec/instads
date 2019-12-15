@@ -33,6 +33,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    topPost: {
+        type: String,
+        required: true
+    },
     conversionRate: {
         type: Number,
         required: false

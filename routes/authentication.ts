@@ -10,6 +10,7 @@ import JWTService from "../services/jwtService";
 import AuthService from "../services/authService";
 import { strict } from "assert";
 import axios from "axios";
+import igService from "../services/igService";
 
 @injectable()
 export default class authenticationController implements IController {
@@ -29,6 +30,9 @@ export default class authenticationController implements IController {
 
     @inject(TYPES.AuthService)
     private _authService!: AuthService;
+
+    @inject(TYPES.IgService)
+    private _igService!: igService;
 
     initRoutes(): void {
         this._providers.forEach(provider => provider.register(this._webServer, this.route));
@@ -57,10 +61,9 @@ export default class authenticationController implements IController {
         response.status(400);
     }
     async createUser(signUpData: any): Promise<iUser> {
-        var response = await axios.get(`https://www.instagram.com/${signUpData.instagram}/?__a=1`);
-        var instagramData = response.data.graphql.user;
+        var instagramData = await this._igService.getUserInfo(signUpData.instagram);
         var user = <iUser>{
-            name: signUpData.name,
+            name: instagramData.full_name,
             email: signUpData.email,
             gender: signUpData.gender,
             countryCode: signUpData.countryCode,

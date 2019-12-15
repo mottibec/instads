@@ -13,6 +13,7 @@ const TYPES = {
     JWTService: Symbol.for("JWTService"),
     AuthService: Symbol.for("AuthService"),
     DbManager: Symbol.for("dbManager"),
+    IgService: Symbol.for("igService")
 };
 
 export { TYPES };

@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
     },
     dob: {
         type: Date,
-        required: true
+        required: false
     },
     instagram: {
         type: String,
@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
     },
     whatsapp: {
         type: String,
-        required: true
+        required: false
     },
     followersCount: {
         type: Number,
@@ -35,15 +35,15 @@ const UserSchema = new mongoose.Schema({
     },
     conversionRate: {
         type: Number,
-        required: true
+        required: false
     },
     priceForPost: {
         type: Number,
-        required: true
+        required: false
     },
     location: {
         type: String,
-        required: true
+        required: false
     },
     categories: {
         type: [String]

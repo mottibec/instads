@@ -12,6 +12,7 @@ import { IAuthProvider, FacebookAuthProvider, GoogleAuthProvider, LocalAuthProvi
 import JWTService from "./services/jwtService";
 import AuthService from "./services/authService";
 import dbManager from "./database/dbManager";
+import igService from "./services/igService";
 
 
 const container = new Container();
@@ -35,6 +36,8 @@ container.bind<JWTService>(TYPES.JWTService)
     .to(JWTService);
 container.bind<dbManager>(TYPES.DbManager)
     .to(dbManager);
+container.bind<igService>(TYPES.IgService)
+    .to(igService)
 
 //auth providers
 container.bind<IAuthProvider>(TYPES.IAuthProvider)

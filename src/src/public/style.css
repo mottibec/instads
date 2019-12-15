@@ -50,6 +50,15 @@ section {
   margin-top: 5rem;
 }
 
+button {
+  cursor: pointer;
+  background: transparent;
+}
+
+button:focus {
+  outline: 0;
+}
+
 .whatsapp {
   color: #25d366;
 }
@@ -72,6 +81,14 @@ section {
   border: 1px solid #ef8767;
   border-radius: 3px;
   color: #ef8767;
+  background: transparent;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.join:focus {
+  outline: 0;
 }
 
 @media only screen and (max-width: 740px) {
@@ -555,5 +572,210 @@ section {
   width: 100%;
   border-top: 1px solid #e5e5e5;
   text-align: center;
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  -webkit-transition: visibility 0s linear 0.25s, opacity 0.25s 0s, -webkit-transform 0.25s;
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, -webkit-transform 0.25s;
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s, -webkit-transform 0.25s;
+  z-index: 10000000;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 0.5rem;
+  width: 45rem;
+}
+
+.modal-content h1 {
+  padding: 32px 0;
+  text-align: center;
+  font-size: 24px;
+  line-height: 130%;
+  color: #222325;
+}
+
+.modal-content__form button {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  background: #ef8767;
+  color: #fff;
+  padding: 13px 30px 13px 16px;
+  border: 1px solid #e4e5e7;
+  border-radius: 4px;
+  font-weight: 700;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.modal-content__form button:hover {
+  background: #b3634b;
+}
+
+.modal-content__form input {
+  width: 100%;
+  padding: 1.3rem 1.4rem;
+  border: 1px solid #c5c6c9;
+  border-radius: 4px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  font: inherit;
+  color: #404145;
+  -webkit-transition: 0.15s ease-in-out;
+  transition: 0.15s ease-in-out;
+  margin-bottom: 1.5rem;
+}
+
+.modal-content__form p {
+  color: #62646a;
+  text-align: center;
+  padding-top: 20px;
+  font-size: 1rem;
+}
+
+.facebook-signing-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: #4267b2;
+  border: 1px solid #4267b2;
+  border-radius: 4px;
+  padding: 13px 30px 13px 16px;
+  width: 100%;
+  color: #fff;
+  font-weight: 700;
+  text-align: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.facebook-signing-button:hover {
+  background: #36538f;
+}
+
+.facebook-signing-button p {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  padding: 0;
+}
+
+.facebook-signing-button i {
+  font-size: 2rem;
+}
+
+.google-signing-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: #fff;
+  border: 1px solid #e4e5e7;
+  border-radius: 4px;
+  padding: 13px 30px 13px 16px;
+  margin: 12px 0;
+  width: 100%;
+  text-align: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.google-signing-button:hover {
+  background: #d8d6d6;
+}
+
+.google-signing-button p {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0;
+}
+
+.google-signing-button i {
+  font-size: 2rem;
+}
+
+.show-modal {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  -webkit-transition: visibility 0s linear 0s, opacity 0.25s 0s, -webkit-transform 0.25s;
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, -webkit-transform 0.25s;
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s, -webkit-transform 0.25s;
+}
+
+.modal-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  color: #62646a;
+  font-weight: 100;
+  font-size: 1.2rem;
+}
+
+.modal-footer a {
+  padding-left: 4px;
+  color: #ef8767;
+}
+
+.divider {
+  height: 12px;
+  margin: 26px 0 32px;
+  text-align: center;
+  border-bottom: 1px solid #e4e5e7;
+}
+
+.divider span {
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0 8px;
+  background-color: #fff;
+  color: #404145;
 }
 /*# sourceMappingURL=style.css.map */

@@ -32,12 +32,13 @@ export default class authenticationController implements IController {
 
     initRoutes(): void {
         this._providers.forEach(provider => provider.register(this._webServer, this.route));
-        this._webServer.registerPost(`${this.route}/signUp`, (request: IRequest, response: IResponse) =>
+        this._webServer.registerPost(`${this.route}/signup`, (request: IRequest, response: IResponse) =>
             this.signUp(request, response));
         this._webServer.registerProtectedGet(`${this.route}/test`, this.testProdected);
     }
     async signUp(request: IRequest, response: IResponse) {
         const signUpData = request.body;
+        console.log(signUpData);
         const savedUser = await this._userService.findByEmail(signUpData.email);
         if (savedUser) {
             return response

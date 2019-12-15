@@ -7,7 +7,7 @@ import dbManager from "./database/dbManager";
 
 const port = + (process.env["PORT"] || "3000");
 var db = container.get<dbManager>(TYPES.DbManager);
-db.connect().then(e => console.log(e));
+db.connect();
 var controllers = container.getAll<IController>(TYPES.IController)
 var webServer = container.get<IWebServer>(TYPES.IWebServer);
 const app = new App(webServer, controllers);

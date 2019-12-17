@@ -8,6 +8,7 @@ import JWTService from "../services/jwtService";
 import { TYPES } from "../inversify.types";
 import path from "path";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 
 @injectable()
@@ -26,6 +27,7 @@ export default class ExpressWebServer implements IWebServer {
         this._app.set("views", path.join(path.dirname(__dirname), "views"));
         this._app.set("view engine", "ejs");
         this._app.use(express.static(path.join(path.dirname(__dirname), 'public')));
+        this._app.use(cors());
         this._router = Router();
     }
     public start(port: number, callback: () => void) {

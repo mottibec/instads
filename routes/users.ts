@@ -7,7 +7,7 @@ import { UserService } from "../services/userService";
 
 @injectable()
 export default class UserController implements IController {
-    public route: string = "/user";
+    public route: string = "/users";
 
     @inject(TYPES.UserService)
     private _userService!: UserService;
@@ -17,9 +17,6 @@ export default class UserController implements IController {
 
     initRoutes() {
         this._webServer.registerGet(this.route, (request: IRequest, response: IResponse) =>
-            this.getUsersView(request, response));
-
-            this._webServer.registerGet(`${this.route}s`, (request: IRequest, response: IResponse) =>
             this.getUsers(request, response));
 
         this._webServer.registerProtectedGet(`${this.route}/:id`, (request: IRequest, response: IResponse) =>

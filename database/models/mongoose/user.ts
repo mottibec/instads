@@ -9,14 +9,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password: {
-        type: String,
-        required: true
-    },
-    dob: {
-        type: Date,
-        required: false
-    },
     instagram: {
         type: String,
         required: true

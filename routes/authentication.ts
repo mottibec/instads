@@ -4,13 +4,14 @@ import { IWebServer } from "../webserver/IWebServer";
 import { inject, multiInject, injectable } from "inversify";
 import { IAuthProvider } from "../services/authProvider";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
-import { User, iUser } from "../models/user";
+import { iUser } from "../models/user";
 import { UserService } from "../services/userService";
 import JWTService from "../services/jwtService";
 import AuthService from "../services/authService";
-import { strict } from "assert";
-import axios from "axios";
 import igService from "../services/igService";
+import { AccountService } from "../services/accountService";
+import { iAccount, gender } from "../models/account";
+import { authProvider } from "../models/account";
 
 @injectable()
 export default class authenticationController implements IController {
@@ -24,6 +25,9 @@ export default class authenticationController implements IController {
 
     @inject(TYPES.UserService)
     private _userService!: UserService;
+
+    @inject(TYPES.AccountService)
+    private _accountService!: AccountService;
 
     @inject(TYPES.JWTService)
     private _tokenService!: JWTService;
@@ -42,8 +46,7 @@ export default class authenticationController implements IController {
     }
     async signUp(request: IRequest, response: IResponse) {
         const signUpData = request.body;
-        console.log(signUpData);
-        const savedUser = await this._userService.findByEmail(signUpData.email);
+        const savedUser = await this._accountService.findByEmail(signUpData.email);
         if (savedUser) {
             return response
                 .status(400)
@@ -52,36 +55,44 @@ export default class authenticationController implements IController {
                 });
         }
 
-        let user = await this.createUser(signUpData);
-        const result = await this._userService.createUser(user);
-        if (result) {
-            var token = this._tokenService.sign({ id: user.id });
+        let { user, account } = await this.createUser(signUpData);
+        console.log(user);
+        console.log(account);
+        const resultUser = await this._userService.createUser(user);
+        const resultAccount = await this._accountService.createAccount(account);
+        if (resultUser && resultAccount) {
+            var token = this._tokenService.sign({ id: account.id });
             response.send({ access_token: token, username: user.name });
         }
         response.status(400);
     }
-    async createUser(signUpData: any): Promise<iUser> {
+    async createUser(signUpData: any): Promise<any> {
         var instagramData = await this._igService.getUserInfo(signUpData.instagram);
         var user = <iUser>{
             name: instagramData.name,
             email: signUpData.email,
-            gender: signUpData.gender,
-            countryCode: signUpData.countryCode,
-            password: signUpData.password,
             avatar: instagramData.profile,
             instagram: signUpData.instagram,
             topPost: instagramData.topPost,
             whatsapp: signUpData.whatsapp,
-            dob: signUpData.dob,
             followersCount: instagramData.followersCount,
             conversionRate: signUpData.conversionRate,
             priceForPost: signUpData.priceForPost,
             location: signUpData.location
         };
 
-        user.password = await this._authService.hash(signUpData.password);
+        var account = <iAccount>{
+            name: instagramData.name,
+            email: signUpData.email,
+            avatar: instagramData.profile,
+            gender: gender.other,
+            authProvider: authProvider.local,
+            password: signUpData.password
+        };
 
-        return user;
+        account.password = await this._authService.hash(signUpData.password);
+
+        return { user, account };
     }
     testProdected(request: IRequest, response: IResponse) {
         response.json({ name: "motti" });

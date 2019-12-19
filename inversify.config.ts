@@ -14,6 +14,8 @@ import AuthService from "./services/authService";
 import dbManager from "./database/dbManager";
 import igService from "./services/igService";
 import FronendController from "./routes/frontend";
+import { AccountService } from "./services/accountService";
+import { AccountRepository } from "./database/AccountRepository";
 
 
 const container = new Container();
@@ -28,7 +30,13 @@ container.bind<UserRepository>(TYPES.UserRepository)
     .to(UserRepository)
     .inSingletonScope();
 
+container.bind<AccountRepository>(TYPES.AccountRepository)
+    .to(AccountRepository)
+    .inSingletonScope();
+
 //services
+container.bind<AccountService>(TYPES.AccountService)
+    .to(AccountService);
 container.bind<UserService>(TYPES.UserService)
     .to(UserService);
 container.bind<AuthService>(TYPES.AuthService)

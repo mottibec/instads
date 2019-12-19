@@ -8,14 +8,13 @@ import { injectable, inject } from "inversify";
 import { IRequest, IResponse } from "../webserver/IWebRequest";
 import JWTService from "./jwtService";
 import { TYPES } from "../inversify.types";
-import { UserService } from "./userService";
-import { User, iUser } from "../models/user";
 import AuthService from "./authService";
-import { Strategy } from "passport-strategy";
+import { iAccount } from "../models/account";
+import { AccountService } from "./accountService";
 
 export interface IAuthProvider {
     register(webServer: IWebServer, route: string): void;
-    verifyUser(...arg: any): void;
+    verifyAccount(...arg: any): void;
 }
 
 @injectable()
@@ -24,8 +23,8 @@ export class LocalAuthProvider implements IAuthProvider {
     @inject(TYPES.JWTService)
     private _jwtService!: JWTService;
 
-    @inject(TYPES.UserService)
-    private _userService!: UserService;
+    @inject(TYPES.AccountService)
+    private _accountService!: AccountService;
 
     @inject(TYPES.AuthService)
     private _authService!: AuthService;
@@ -35,7 +34,7 @@ export class LocalAuthProvider implements IAuthProvider {
             usernameField: 'email',
             passwordField: 'password',
             session: false
-        }, async (...args) => this.verifyUser(...args)));
+        }, async (...args) => this.verifyAccount(...args)));
 
         webServer.registerPost(`${route}/login`, (request: any, response: any, next: any) =>
             passport.authenticate("local", { session: false }, (err, user, info) => {
@@ -55,16 +54,16 @@ export class LocalAuthProvider implements IAuthProvider {
         );
         this._jwtService.register();
     }
-    async verifyUser(userName: string, password: string, callback: Function) {
-        const user = await this._userService.findByEmail(userName);
-        if (!user) {
+    async verifyAccount(userName: string, password: string, callback: Function) {
+        const account = await this._accountService.findByEmail(userName);
+        if (!account) {
             return callback(null, false, "invalid user name or password");
         }
-        const doseMatch = await this._authService.verifyHash(password, user.password);
+        const doseMatch = await this._authService.verifyHash(password, account.password);
         if (!doseMatch) {
             return callback(null, false, "invalid user name or password");
         }
-        return callback(null, { id: user.id, name: user.name });
+        return callback(null, { id: account.id, name: account.name });
 
     }
 }
@@ -74,8 +73,8 @@ export class GoogleAuthProvider implements IAuthProvider {
 
     private _googleStrategy!: GoogleStrategy;
 
-    @inject(TYPES.UserService)
-    private _userService!: UserService;
+    @inject(TYPES.AccountService)
+    private _accountService!: AccountService;
 
     @inject(TYPES.JWTService)
     private _jwtService!: JWTService;
@@ -84,9 +83,9 @@ export class GoogleAuthProvider implements IAuthProvider {
         this._googleStrategy = new GoogleStrategy(config.oAuth.google.appId);
 
         webServer.registerPost(`${route}/google`, async (request: IRequest, response: IResponse) =>
-            await this.verifyUser(request, response));
+            await this.verifyAccount(request, response));
     }
-    async verifyUser(request: IRequest, response: IResponse) {
+    async verifyAccount(request: IRequest, response: IResponse) {
         const idToken = request.body.id_token;
         try {
             const profileInfo = await this._googleStrategy.verifyIdToken({
@@ -98,19 +97,18 @@ export class GoogleAuthProvider implements IAuthProvider {
 
             if (paylod && paylod.email_verified && paylod.email) {
                 console.log("paylod.email", paylod.email);
-                let user = await this._userService.findByEmail(paylod.email);
-                if (!user) {
-                    user = <iUser>{};
+                let account = await this._accountService.findByEmail(paylod.email);
+                if (!account) {
+                    account = <iAccount>{};
                     const name = paylod.given_name || paylod.family_name || paylod.email;
-                    user.name = name;
-                    user.email = paylod.email;
-                    user.authToken = idToken;
-                    user.avatar = paylod.picture || "";
-                    //newUser.authRefreshToken = refreshToken;
-                    await this._userService.createUser(user);
+                    account.name = name;
+                    account.email = paylod.email;
+                    account.authToken = idToken;
+                    account.avatar = paylod.picture || "";
+                    //account.authRefreshToken = refreshToken;
+                    await this._accountService.createAccount(account);
                 }
-                console.log(user);
-                const token = this._jwtService.sign({ id: user.id });
+                const token = this._jwtService.sign({ id: account.id });
                 return response.json({ access_token: token });
             }
             else {
@@ -131,15 +129,15 @@ export class FacebookAuthProvider implements IAuthProvider {
     @inject(TYPES.JWTService)
     private _jwtService!: JWTService;
 
-    @inject(TYPES.UserService)
-    private _userService!: UserService;
+    @inject(TYPES.AccountService)
+    private _accountService!: AccountService;
 
     register(webServer: IWebServer, route: string): void {
         passport.use(new FacebookTokenStrategy({
             clientID: config.oAuth.facebook.appId,
             clientSecret: config.oAuth.facebook.secret,
             profileFields: ['id', 'email', 'gender', 'locale', 'name', 'displayName'],
-        }, (accessToken: string, refreshToken: string, profile: any, done: Function) => this.verifyUser(accessToken, refreshToken, profile, done)));
+        }, (accessToken: string, refreshToken: string, profile: any, done: Function) => this.verifyAccount(accessToken, refreshToken, profile, done)));
         webServer.registerPost(`${route}/facebook`, (request: IRequest, response: IResponse) =>
             passport.authenticate('facebook-token', { scope: ['email'] }, (error, user, info) => {
                 const token = this._jwtService.sign(user);
@@ -147,21 +145,21 @@ export class FacebookAuthProvider implements IAuthProvider {
             })(request, response)
         );
     }
-    async verifyUser(accessToken: string, refreshToken: string, profile: any, done: Function) {
-        const user = await this._userService.getUser(profile.id);
-        if (user) {
-            return done(null, { id: user.id });
+    async verifyAccount(accessToken: string, refreshToken: string, profile: any, done: Function) {
+        const account = await this._accountService.getAccount(profile.id);
+        if (account) {
+            return done(null, { id: account.id });
         }
         const emails = profile.emails as { value: string }[];
 
 
-        const newUser = <iUser>(profile.displayName, emails[0].value, profile.id);
+        const newAccount = <iAccount>(profile.displayName, emails[0].value, profile.id);
 
-        newUser.authToken = accessToken;
-        newUser.authRefreshToken = refreshToken;
+        newAccount.authToken = accessToken;
+        newAccount.authRefreshToken = refreshToken;
 
-        await this._userService.createUser(newUser);
+        await this._accountService.createAccount(newAccount);
 
-        return done(null, { id: newUser.id });
+        return done(null, { id: newAccount.id });
     }
 }

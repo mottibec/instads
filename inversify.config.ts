@@ -13,6 +13,7 @@ import JWTService from "./services/jwtService";
 import AuthService from "./services/authService";
 import dbManager from "./database/dbManager";
 import igService from "./services/igService";
+import FronendController from "./routes/frontend";
 
 
 const container = new Container();
@@ -52,5 +53,8 @@ container.bind<IController>(TYPES.IController)
     .to(UserController);
 container.bind<IController>(TYPES.IController)
     .to(authenticationController);
+
+container.bind<IController>(TYPES.IController)
+    .to(FronendController);
 
 export { container };  

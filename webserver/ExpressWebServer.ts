@@ -27,7 +27,7 @@ export default class ExpressWebServer implements IWebServer {
         this._app.use(passport.initialize());
         this._app.set("views", path.join(path.dirname(__dirname), "views"));
         this._app.set("view engine", "ejs");
-        this._app.use(express.static(path.join(path.dirname(__dirname), 'public')));
+        this._app.use(express.static(path.join(path.dirname(__dirname), 'build')));
         this._app.use(cors());
         this._router = Router();
     }

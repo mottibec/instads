@@ -48,8 +48,9 @@ export class LocalAuthProvider implements IAuthProvider {
                             info: info
                         });
                 }
+                console.log(user);
                 const token = this._jwtService.sign(user);
-                return response.json({ access_token: token });
+                return response.json({ username: user.name, access_token: token });
             })(request, response, next)
         );
         this._jwtService.register();
@@ -63,7 +64,7 @@ export class LocalAuthProvider implements IAuthProvider {
         if (!doseMatch) {
             return callback(null, false, "invalid user name or password");
         }
-        return callback(null, { id: user.id });
+        return callback(null, { id: user.id, name: user.name });
 
     }
 }

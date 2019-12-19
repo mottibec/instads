@@ -56,7 +56,7 @@ export default class authenticationController implements IController {
         const result = await this._userService.createUser(user);
         if (result) {
             var token = this._tokenService.sign({ id: user.id });
-            response.send(token);
+            response.send({ access_token: token, username: user.name });
         }
         response.status(400);
     }
@@ -70,7 +70,7 @@ export default class authenticationController implements IController {
             password: signUpData.password,
             avatar: instagramData.profile,
             instagram: signUpData.instagram,
-            topPost:instagramData.topPost,
+            topPost: instagramData.topPost,
             whatsapp: signUpData.whatsapp,
             dob: signUpData.dob,
             followersCount: instagramData.followersCount,

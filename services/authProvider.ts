@@ -1,7 +1,6 @@
 import { IWebServer } from "../webserver/IWebServer";
 import passport from "passport";
 import { OAuth2Client as GoogleStrategy } from "google-auth-library";
-import FacebookTokenStrategy from "passport-facebook-token";
 import { Strategy as LocalStrategy } from "passport-local";
 import config from "../config/config";
 import { injectable, inject } from "inversify";
@@ -9,8 +8,9 @@ import { IRequest, IResponse } from "../webserver/IWebRequest";
 import JWTService from "./jwtService";
 import { TYPES } from "../inversify.types";
 import AuthService from "./authService";
-import { iAccount } from "../models/account";
+import { iAccount, authProvider } from "../models/account";
 import { AccountService } from "./accountService";
+import axios from "axios";
 
 export interface IAuthProvider {
     register(webServer: IWebServer, route: string): void;
@@ -47,7 +47,6 @@ export class LocalAuthProvider implements IAuthProvider {
                             info: info
                         });
                 }
-                console.log(user);
                 const token = this._jwtService.sign(user);
                 return response.json({ username: user.name, access_token: token });
             })(request, response, next)
@@ -59,11 +58,11 @@ export class LocalAuthProvider implements IAuthProvider {
         if (!account) {
             return callback(null, false, "invalid user name or password");
         }
-        const doseMatch = await this._authService.verifyHash(password, account.password);
+        const doseMatch = await this._authService.verifyHash(password, account.password || "");
         if (!doseMatch) {
             return callback(null, false, "invalid user name or password");
         }
-        return callback(null, { id: account.id, name: account.name });
+        return callback(null, { email: account.email, name: account.name });
 
     }
 }
@@ -108,7 +107,7 @@ export class GoogleAuthProvider implements IAuthProvider {
                     //account.authRefreshToken = refreshToken;
                     await this._accountService.createAccount(account);
                 }
-                const token = this._jwtService.sign({ id: account.id });
+                const token = this._jwtService.sign({ email: account.email });
                 return response.json({ access_token: token });
             }
             else {
@@ -133,33 +132,25 @@ export class FacebookAuthProvider implements IAuthProvider {
     private _accountService!: AccountService;
 
     register(webServer: IWebServer, route: string): void {
-        passport.use(new FacebookTokenStrategy({
-            clientID: config.oAuth.facebook.appId,
-            clientSecret: config.oAuth.facebook.secret,
-            profileFields: ['id', 'email', 'gender', 'locale', 'name', 'displayName'],
-        }, (accessToken: string, refreshToken: string, profile: any, done: Function) => this.verifyAccount(accessToken, refreshToken, profile, done)));
         webServer.registerPost(`${route}/facebook`, (request: IRequest, response: IResponse) =>
-            passport.authenticate('facebook-token', { scope: ['email'] }, (error, user, info) => {
-                const token = this._jwtService.sign(user);
-                return response.json({ access_token: token });
-            })(request, response)
-        );
+            this.verifyAccount(request, response));
     }
-    async verifyAccount(accessToken: string, refreshToken: string, profile: any, done: Function) {
-        const account = await this._accountService.getAccount(profile.id);
+    async verifyAccount(request: IRequest, response: IResponse) {
+        var fbAuthData = request.body;
+        const account = await this._accountService.findByEmail(fbAuthData.email);
         if (account) {
-            return done(null, { id: account.id });
+            var token = this._jwtService.sign({ id: account.email });
+            response.send({ access_token: token, username: account.name });
         }
-        const emails = profile.emails as { value: string }[];
-
-
-        const newAccount = <iAccount>(profile.displayName, emails[0].value, profile.id);
-
-        newAccount.authToken = accessToken;
-        newAccount.authRefreshToken = refreshToken;
-
+        const newAccount = <iAccount>{
+            name: fbAuthData.name,
+            email: fbAuthData.email,
+            id: fbAuthData.id,
+            authToken: fbAuthData.accessToken,
+            authProvider: authProvider.facebook
+        };
         await this._accountService.createAccount(newAccount);
-
-        return done(null, { id: newAccount.id });
+        var token = this._jwtService.sign({ email: newAccount.email });
+        response.send({ access_token: token, username: newAccount.name });
     }
 }

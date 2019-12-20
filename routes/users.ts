@@ -19,22 +19,15 @@ export default class UserController implements IController {
         this._webServer.registerGet(this.route, (request: IRequest, response: IResponse) =>
             this.getUsers(request, response));
 
+        this._webServer.registerProtectedGet('/user', (request: IRequest, response: IResponse) =>
+            this.getAuthenticatedUser(request, response));
+
         this._webServer.registerProtectedGet(`${this.route}/:id`, (request: IRequest, response: IResponse) =>
             this.getUser(request, response));
 
         this._webServer.registerProtectedPost(this.route, (request: IRequest, response: IResponse) =>
             this.createUser(request, response));
 
-        this._webServer.registerProtectedPost(`${this.route}/:id/rate`, (request: IRequest, response: IResponse) =>
-            this.rateUser(request, response));
-
-        this._webServer.registerProtectedPost(`${this.route}/ping`, (request: IRequest, response: IResponse) =>
-            this.pingUser(request, response));
-
-    }
-    async getUsersView(request: IRequest, response: IResponse) {
-        let result = await this._userService.getAllUsers();
-        response.render("users", {users: result});
     }
     async getUsers(request: IRequest, response: IResponse) {
         let result = await this._userService.getAllUsers();
@@ -51,17 +44,7 @@ export default class UserController implements IController {
         let user = await this._userService.getUser(id);
         response.send(user)
     }
-    rateUser(request: IRequest, response: IResponse) {
-        let rating = request.body.rating;
-        let userId = request.body.user.id;
-        let user = {
-            id: userId,
-            rating: rating
-        }
-        response.send(200);
-    }
-     pingUser(request: IRequest, response: IResponse) {
-        let user = request.body.userId;
-        response.send(200);
+    getAuthenticatedUser(request: IRequest, response: IResponse) {
+        response.send(request.user)
     }
 }

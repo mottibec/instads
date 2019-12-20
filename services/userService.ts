@@ -9,10 +9,10 @@ export class UserService {
     private _userRepository!: UserRepository;
 
     findByEmail(email: string) {
-        return this._userRepository.findOne({'email': email});
+        return this._userRepository.findOne({ 'email': email });
     }
     getUser(id: any) {
-        return this._userRepository.findOne(id);
+        return this._userRepository.findOne({ 'id': id });
     }
     createUser(user: iUser) {
         return this._userRepository.create(user);

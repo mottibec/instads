@@ -10,9 +10,7 @@ export class MongoRepository<T extends mongoose.Document> implements IRepository
     constructor(@unmanaged() model: mongoose.Model<mongoose.Document>) {
         this._model = model;
     }
-
     async create(item: T): Promise<boolean> {
-        console.log(item);
         var result = await this._model.create(item).catch(error => console.log(error));
         return result != null;
     }

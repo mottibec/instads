@@ -11,7 +11,15 @@ const AccountSchema = new mongoose.Schema({
     },
     password: {
         type: String,
+        required: false
+    },
+    authProvider: {
+        type: String,
         required: true
+    },
+    authToken: {
+        type: String,
+        required: false
     },
     dob: {
         type: Date,

@@ -5,21 +5,23 @@ import jwt from "jsonwebtoken";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../inversify.types";
 import { UserService } from "./userService";
+import { AccountService } from "./accountService";
 
 @injectable()
 export default class JWTService {
 
-    @inject(TYPES.UserService)
-    private _userService!: UserService;
+    @inject(TYPES.AccountService)
+    private _userService!: AccountService;
 
     register() {
         passport.use(new jwtStrategy({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: config.jwtSecret
         }, async (jwtPayload: any, callback: Function) => {
-            const user = await this._userService.getUser(jwtPayload.id);
-            if (user) {
-                return callback(null, user);
+            const account = await this._userService.getAccount(jwtPayload.id);
+            account.password = undefined;
+            if (account) {
+                return callback(null, account);
             }
             return callback("", false);
 

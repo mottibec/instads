@@ -59,7 +59,7 @@ export default class authenticationController implements IController {
         const resultUser = await this._userService.createUser(user);
         const resultAccount = await this._accountService.createAccount(account);
         if (resultUser && resultAccount) {
-            var token = this._tokenService.sign({ id: account.id });
+            var token = this._tokenService.sign({ id: account.email });
             response.send({ access_token: token, username: user.name });
         }
         response.status(400);
@@ -93,6 +93,6 @@ export default class authenticationController implements IController {
         return { user, account };
     }
     testProdected(request: IRequest, response: IResponse) {
-        response.json({ name: "motti" });
+        response.json(request.user);
     }
 }

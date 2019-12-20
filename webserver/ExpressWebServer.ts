@@ -57,8 +57,7 @@ export default class ExpressWebServer implements IWebServer {
             callback(request, response));
     }
     handleError(err: Error, req: Request, res: Response, next: NextFunction) {
-        console.log("err", err);
         res.status(500);
-        res.render('error', { error: err });
+        res.send({ error: err });
     }
 }

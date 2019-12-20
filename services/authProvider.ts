@@ -47,7 +47,6 @@ export class LocalAuthProvider implements IAuthProvider {
                             info: info
                         });
                 }
-                console.log(user);
                 const token = this._jwtService.sign(user);
                 return response.json({ username: user.name, access_token: token });
             })(request, response, next)
@@ -63,7 +62,7 @@ export class LocalAuthProvider implements IAuthProvider {
         if (!doseMatch) {
             return callback(null, false, "invalid user name or password");
         }
-        return callback(null, { id: account.id, name: account.name });
+        return callback(null, { email: account.email, name: account.name });
 
     }
 }
@@ -108,7 +107,7 @@ export class GoogleAuthProvider implements IAuthProvider {
                     //account.authRefreshToken = refreshToken;
                     await this._accountService.createAccount(account);
                 }
-                const token = this._jwtService.sign({ id: account.id });
+                const token = this._jwtService.sign({ email: account.email });
                 return response.json({ access_token: token });
             }
             else {
@@ -138,9 +137,9 @@ export class FacebookAuthProvider implements IAuthProvider {
     }
     async verifyAccount(request: IRequest, response: IResponse) {
         var fbAuthData = request.body;
-        const account = await this._accountService.getAccount(fbAuthData.id);
+        const account = await this._accountService.findByEmail(fbAuthData.email);
         if (account) {
-            var token = this._jwtService.sign({ id: account.id });
+            var token = this._jwtService.sign({ id: account.email });
             response.send({ access_token: token, username: account.name });
         }
         const newAccount = <iAccount>{
@@ -151,7 +150,7 @@ export class FacebookAuthProvider implements IAuthProvider {
             authProvider: authProvider.facebook
         };
         await this._accountService.createAccount(newAccount);
-        var token = this._jwtService.sign({ id: newAccount.id });
+        var token = this._jwtService.sign({ email: newAccount.email });
         response.send({ access_token: token, username: newAccount.name });
     }
 }

@@ -56,8 +56,6 @@ export default class authenticationController implements IController {
         }
 
         let { user, account } = await this.createUser(signUpData);
-        console.log(user);
-        console.log(account);
         const resultUser = await this._userService.createUser(user);
         const resultAccount = await this._accountService.createAccount(account);
         if (resultUser && resultAccount) {

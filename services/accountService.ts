@@ -9,10 +9,10 @@ export class AccountService {
     private _accountRepository!: AccountRepository;
 
     findByEmail(email: string) {
-        return this._accountRepository.findOne({'email': email});
+        return this._accountRepository.findOne({ 'email': email });
     }
     getAccount(id: any) {
-        return this._accountRepository.findOne(id);
+        return this._accountRepository.findOne({ 'id': id });
     }
     createAccount(account: iAccount) {
         return this._accountRepository.create(account);

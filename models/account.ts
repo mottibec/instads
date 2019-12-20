@@ -4,10 +4,10 @@ interface iAccount extends mongoose.Document {
     name: string;
     avatar: string;
     email?: string;
-    password: string;
+    password?: string;
     gender: gender;
     dob: Date,
-    authProvider?: authProvider
+    authProvider: authProvider
     authToken: string,
     authRefreshToken: string;
 }

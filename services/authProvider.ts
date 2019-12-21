@@ -10,7 +10,6 @@ import { TYPES } from "../inversify.types";
 import AuthService from "./authService";
 import { iAccount, authProvider } from "../models/account";
 import { AccountService } from "./accountService";
-import axios from "axios";
 
 export interface IAuthProvider {
     register(webServer: IWebServer, route: string): void;
@@ -139,7 +138,7 @@ export class FacebookAuthProvider implements IAuthProvider {
         var fbAuthData = request.body;
         const account = await this._accountService.findByEmail(fbAuthData.email);
         if (account) {
-            var token = this._jwtService.sign({ id: account.email });
+            var token = this._jwtService.sign({ email: account.email });
             response.send({ access_token: token, username: account.name, isNewUser: false });
             return;
         }

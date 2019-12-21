@@ -7,7 +7,6 @@ import bodyparser from "body-parser";
 import JWTService from "../services/jwtService";
 import { TYPES } from "../inversify.types";
 import path from "path";
-import bodyParser from "body-parser";
 import cors from "cors";
 
 

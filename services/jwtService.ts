@@ -4,7 +4,6 @@ import config from "../config/config";
 import jwt from "jsonwebtoken";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../inversify.types";
-import { UserService } from "./userService";
 import { AccountService } from "./accountService";
 
 @injectable()
@@ -27,8 +26,7 @@ export default class JWTService {
         }));
     }
     sign(item: any) {
-        const token = jwt.sign(item, config.jwtSecret);
-        return token;
+        return jwt.sign(item, config.jwtSecret);
     }
     verifyToken() {
         return passport.authenticate('jwt', { session: false });

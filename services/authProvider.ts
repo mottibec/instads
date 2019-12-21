@@ -140,7 +140,8 @@ export class FacebookAuthProvider implements IAuthProvider {
         const account = await this._accountService.findByEmail(fbAuthData.email);
         if (account) {
             var token = this._jwtService.sign({ id: account.email });
-            response.send({ access_token: token, username: account.name });
+            response.send({ access_token: token, username: account.name, isNewUser: false });
+            return;
         }
         const newAccount = <iAccount>{
             name: fbAuthData.name,
@@ -151,6 +152,6 @@ export class FacebookAuthProvider implements IAuthProvider {
         };
         await this._accountService.createAccount(newAccount);
         var token = this._jwtService.sign({ email: newAccount.email });
-        response.send({ access_token: token, username: newAccount.name });
+        response.send({ access_token: token, username: newAccount.name, isNewUser: true });
     }
 }

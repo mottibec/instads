@@ -42,7 +42,9 @@ export default class authenticationController implements IController {
         this._providers.forEach(provider => provider.register(this._webServer, this.route));
         this._webServer.registerPost(`${this.route}/signup`, (request: IRequest, response: IResponse) =>
             this.signUp(request, response));
-        this._webServer.registerProtectedGet(`${this.route}/test`, this.testProdected);
+
+        this._webServer.registerProtectedPost(`${this.route}/complete`, (request: IRequest, response: IResponse) =>
+            this.completeSignUp(request, response));
     }
     async signUp(request: IRequest, response: IResponse) {
         const signUpData = request.body;
@@ -92,7 +94,20 @@ export default class authenticationController implements IController {
 
         return { user, account };
     }
-    testProdected(request: IRequest, response: IResponse) {
-        response.json(request.user);
+    async completeSignUp(request: IRequest, response: IResponse) {
+        const signUpData = request.body;
+        const account = request.user;
+        var instagramData = await this._igService.getUserInfo(signUpData.instagram);
+        var user = <iUser>{
+            name: instagramData.name,
+            email: account.email,
+            avatar: instagramData.profile,
+            instagram: signUpData.instagram,
+            topPost: instagramData.topPost,
+            whatsapp: signUpData.phone,
+            followersCount: instagramData.followersCount
+        };
+        const resultUser = await this._userService.createUser(user);
+        response.send({ username: user.name });
     }
 }

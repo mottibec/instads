@@ -18,8 +18,7 @@ export default class JWTService {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: config.jwtSecret
         }, async (jwtPayload: any, callback: Function) => {
-            const account = await this._userService.getAccount(jwtPayload.id);
-            account.password = undefined;
+            const account = await this._userService.findByEmail(jwtPayload.email);
             if (account) {
                 return callback(null, account);
             }

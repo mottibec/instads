@@ -25,8 +25,6 @@ export default class ExpressWebServer implements IWebServer {
         this._app.use(bodyparser.urlencoded({ extended: false }));
         this._app.use(bodyparser.json());
         this._app.use(passport.initialize());
-        this._app.set("views", path.join(path.dirname(__dirname), "views"));
-        this._app.set("view engine", "ejs");
         this._app.use(express.static(path.join(path.dirname(__dirname), 'build')));
         this._app.use(cors());
         this._router = Router();
@@ -53,8 +51,8 @@ export default class ExpressWebServer implements IWebServer {
             callback(request, response));
     }
     registerProtectedPost(routeTemplate: string, callback: Function): void {
-        this._router.get(routeTemplate, this._jwtService.verifyToken(), (request: Request, response: Response) =>
-            callback(request, response));
+        this._router.post(routeTemplate, this._jwtService.verifyToken(), (request: Request, response: Response, next: Function) =>
+            callback(request, response, next));
     }
     handleError(err: Error, req: Request, res: Response, next: NextFunction) {
         res.status(500);

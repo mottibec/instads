@@ -5,8 +5,7 @@ import { injectable } from "inversify";
 export default class AuthService {
     async hash(str: string) {       
         const salt = await bcrypt.genSalt(10);       
-        const hash = await bcrypt.hash(str, salt);        
-        return hash;
+        return await bcrypt.hash(str, salt);
     }
     async verifyHash(str: string, hash: string) {
         return await bcrypt.compare(str, hash);

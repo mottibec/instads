@@ -58,10 +58,10 @@ export default class authenticationController implements IController {
         }
 
         let { user, account } = await this.createUser(signUpData);
-        const resultUser = await this._userService.createUser(user);
-        const resultAccount = await this._accountService.createAccount(account);
-        if (resultUser && resultAccount) {
-            var token = this._tokenService.sign({ id: account.email });
+        const userResult = await this._userService.createUser(user);
+        const accountResult = await this._accountService.createAccount(account);
+        if (userResult && accountResult) {
+            var token = this._tokenService.sign({ email: account.email });
             response.send({ access_token: token, username: user.name });
         }
         response.status(400);

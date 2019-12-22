@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import mongoose from "mongoose";
 
 interface iUser extends mongoose.Document {
@@ -10,6 +9,7 @@ interface iUser extends mongoose.Document {
     topPost: string,
     followersCount: number;
     conversionRate: number;
+    activeFollowers: number;
     priceForPost: number;
     location: string;
     categories: Category[];

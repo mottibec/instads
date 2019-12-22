@@ -53,6 +53,10 @@ export default class ExpressWebServer implements IWebServer {
         this._router.post(routeTemplate, this._jwtService.verifyToken(), (request: Request, response: Response, next: Function) =>
             callback(request, response, next));
     }
+    registerProtectedPut(routeTemplate: string, callback: Function): void {
+        this._router.put(routeTemplate, this._jwtService.verifyToken(), (request: Request, response: Response, next: Function) =>
+            callback(request, response, next));
+    }
     handleError(err: Error, req: Request, res: Response, next: NextFunction) {
         res.status(500);
         res.send({ error: err });

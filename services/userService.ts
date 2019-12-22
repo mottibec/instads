@@ -20,4 +20,7 @@ export class UserService {
     getAllUsers() {
         return this._userRepository.find({});
     }
+    update(user: iUser) {
+        return this._userRepository.update(user);
+    }
 }

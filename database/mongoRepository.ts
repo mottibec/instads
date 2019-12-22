@@ -1,6 +1,6 @@
 import { IRepository } from "./IRepository";
 import mongoose from "mongoose";
-import { injectable, inject, unmanaged } from "inversify";
+import { injectable, unmanaged } from "inversify";
 
 @injectable()
 export class MongoRepository<T extends mongoose.Document> implements IRepository<T> {
@@ -15,8 +15,16 @@ export class MongoRepository<T extends mongoose.Document> implements IRepository
         return result != null;
     }
     update(item: T): Promise<boolean> {
-        this._model.update({}, item);
-        return Promise.resolve(true);
+        return new Promise<boolean>((resolve, reject) => {
+            this._model.updateOne(null, item, (err, raw) => {
+                if (err) {
+                    resolve(false);
+                }
+                else {
+                    resolve(true);
+                }
+            });
+        });
     }
     async find(query: any): Promise<T[]> {
         const results = await this._model.find(query).exec();

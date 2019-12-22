@@ -14,12 +14,26 @@ export default class igService {
             };
         }
         var mostLikedPost = this.getMostLikedPost(userinfo);
+        var activeFollowers = this.getActiveFollowersPercentage(userinfo);
         return {
             name: userinfo.full_name,
             profile: userinfo.profile_pic_url_hd,
             followersCount: userinfo.edge_followed_by.count,
-            topPost: mostLikedPost
+            topPost: mostLikedPost,
+            activeFollowers: activeFollowers
         };
+    }
+    getActiveFollowersPercentage(userInfo: any) {
+        var count = 0;
+        var sum = 0;
+        userInfo.edge_owner_to_timeline_media.edges.forEach((post: any) => {
+            sum += post.node.edge_liked_by.count;
+            count++;
+        });
+        var followersCount = userInfo.edge_followed_by.count;
+        var avg = sum / count || 0;
+        var precentage = (avg / followersCount * 100);
+        return Math.round(precentage);
     }
     getMostLikedPost(userInfo: any): string {
         var postUrl = "";

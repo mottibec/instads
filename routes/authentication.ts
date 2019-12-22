@@ -76,6 +76,7 @@ export default class authenticationController implements IController {
             topPost: instagramData.topPost,
             whatsapp: signUpData.whatsapp,
             followersCount: instagramData.followersCount,
+            activeFollowers: instagramData.activeFollowers,
             conversionRate: signUpData.conversionRate,
             priceForPost: signUpData.priceForPost,
             location: signUpData.location
@@ -105,7 +106,8 @@ export default class authenticationController implements IController {
             instagram: signUpData.instagram,
             topPost: instagramData.topPost,
             whatsapp: signUpData.phone,
-            followersCount: instagramData.followersCount
+            followersCount: instagramData.followersCount,
+            activeFollowers: instagramData.activeFollowers
         };
         const resultUser = await this._userService.createUser(user);
         response.send({ username: user.name });

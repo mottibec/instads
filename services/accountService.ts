@@ -20,4 +20,7 @@ export class AccountService {
     getAllAccounts() {
         return this._accountRepository.find({});
     }
+    update(account: iAccount): Promise<boolean> {
+        return this._accountRepository.update(account);
+    }
 }

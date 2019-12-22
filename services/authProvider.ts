@@ -10,6 +10,7 @@ import { TYPES } from "../inversify.types";
 import AuthService from "./authService";
 import { iAccount, authProvider } from "../models/account";
 import { AccountService } from "./accountService";
+import { UserService } from "./userService";
 
 export interface IAuthProvider {
     register(webServer: IWebServer, route: string): void;
@@ -130,6 +131,9 @@ export class FacebookAuthProvider implements IAuthProvider {
     @inject(TYPES.AccountService)
     private _accountService!: AccountService;
 
+    @inject(TYPES.UserService)
+    private _userService!: UserService;
+
     register(webServer: IWebServer, route: string): void {
         webServer.registerPost(`${route}/facebook`, (request: IRequest, response: IResponse) =>
             this.verifyAccount(request, response));
@@ -138,8 +142,13 @@ export class FacebookAuthProvider implements IAuthProvider {
         var fbAuthData = request.body;
         const account = await this._accountService.findByEmail(fbAuthData.email);
         if (account) {
+            var user = await this._userService.findByEmail(account.email);
+            var isProfileComplete = true;
+            if (!user) {
+                isProfileComplete = false;
+            }
             var token = this._jwtService.sign({ email: account.email });
-            response.send({ access_token: token, username: account.name, isNewUser: false });
+            response.send({ access_token: token, username: account.name, isProfileComplete: isProfileComplete });
             return;
         }
         const newAccount = <iAccount>{
@@ -151,6 +160,6 @@ export class FacebookAuthProvider implements IAuthProvider {
         };
         await this._accountService.createAccount(newAccount);
         var token = this._jwtService.sign({ email: newAccount.email });
-        response.send({ access_token: token, username: newAccount.name, isNewUser: true });
+        response.send({ access_token: token, username: newAccount.name, isProfileComplete: false });
     }
 }

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 interface iAccount extends mongoose.Document {
     name: string;
     avatar: string;
-    email?: string;
+    email: string;
     password?: string;
     gender: gender;
     dob: Date,

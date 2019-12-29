@@ -11,6 +11,7 @@ import AuthService from "./authService";
 import { iAccount, authProvider } from "../models/account";
 import { AccountService } from "./accountService";
 import { UserService } from "./userService";
+import axios from "axios";
 
 export interface IAuthProvider {
     register(webServer: IWebServer, route: string): void;
@@ -120,6 +121,38 @@ export class GoogleAuthProvider implements IAuthProvider {
         }
 
     }
+}
+
+export class InstagramAuthProvider implements IAuthProvider {
+
+    register(webServer: IWebServer, route: string): void {
+        webServer.registerGet(`${route}/instagram`, this.onAuthCallBack);
+        webServer.registerGet(`${route}/instagram/deauthorize`, this.deauthorize);
+        webServer.registerGet(`${route}/instagram/delete`, this.delete);
+    }
+    async delete(request: IRequest, response: IResponse) {
+
+    }
+    async deauthorize(request: IRequest, response: IResponse) {
+
+    }
+    async onAuthCallBack(request: IRequest, response: IResponse) {
+        var code = request.body;
+        var data = {
+            app_id: config.oAuth.instagram.appId,
+            app_secret: config.oAuth.instagram.secret,
+            grant_type: "authorization_code",
+            redirect_uri: "",
+            code: code
+        };
+        var igResponse = await axios.post("https://api.instagram.com/oauth/access_token", data);
+        var user = await axios.get(`https://graph.instagram.com/${igResponse.data.user_id}?fields=id,username&access_token=${response.data.access_token}`);
+    }
+    verifyAccount(...arg: any): void {
+        throw new Error("Method not implemented.");
+    }
+
+
 }
 
 @injectable()

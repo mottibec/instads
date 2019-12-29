@@ -146,7 +146,7 @@ export class InstagramAuthProvider implements IAuthProvider {
             code: code
         };
         var igResponse = await axios.post("https://api.instagram.com/oauth/access_token", data);
-        var user = await axios.get(`https://graph.instagram.com/${igResponse.data.user_id}?fields=id,username&access_token=${response.data.access_token}`);
+        var user = await axios.get(`https://graph.instagram.com/${igResponse.data.user_id}?fields=id,username&access_token=${igResponse.data.access_token}`);
     }
     verifyAccount(...arg: any): void {
         throw new Error("Method not implemented.");

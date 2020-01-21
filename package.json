@@ -31,7 +31,7 @@
     "@types/cors": "^2.8.6",
     "@types/ejs": "^3.0.0",
     "@types/express": "^4.17.2",
-    "@types/mongoose": "^5.5.32",
+    "@types/mongoose": "^5.5.41",
     "@types/node": "^11.15.3",
     "@types/passport": "^1.0.2",
     "@types/passport-facebook": "^2.1.9",

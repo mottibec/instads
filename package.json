@@ -60,7 +60,7 @@
     "request": "^2.88.0",
     "snyk": "^1.258.1",
     "socket.io": "^2.3.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.8.2"
   },
   "snyk": true
 }

@@ -28,7 +28,7 @@
   "homepage": "https://github.com/mojobec/instads#readme",
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
-    "@types/cors": "^2.8.6",
+    "@types/cors": "^2.8.11",
     "@types/ejs": "^3.0.0",
     "@types/express": "^4.17.2",
     "@types/mongoose": "^5.7.6",
